@@ -9,54 +9,76 @@
 
 //-----------------------------------------------------------------------------
 
+/*!
 
-int More_or_not(double A, double B)
-    {
-    if (A<B) return -1;
-    if (A>B) return 1;
-    }
+     \brief Сравнение чисел.
+     \param[in] A, B - сравниваемые числа.
+     \return -1 - А меньше В, 0 - А и В равны, 1 - А больше В.
 
+     Данная функция позволяет сравнить два числа.
+*/
 
-int comparer(double A, double B)
-    {
-    if (fabs(A)-fabs(B)<infelicity) return 0;
-    else {int more_or_not = More_or_not(A, B); return more_or_not;}
-    }
+ int comparer(double A, double B)
+     {
+     if (fabs(A)-fabs(B) < infelicity)
+     return 0;
+
+     if              ( A < B )
+     return -1;
+
+     if              ( A > B )
+     return 1;
+     }
 
 
 //-----------------------------------------------------------------------------
 
+/*!
 
- void checker( double* a, double* b, double* c)
+     \brief Дополнения к scanf().
+     \param[in] a, b, c - входящие параметры.
+
+     Эта функция предотвращает ошибки пользовательского ввода.
+*/
+
+ void checker (double* a, double* b, double* c)
      {
      assert (a != NULL);
      assert (b != NULL);
      assert (c != NULL);
 
-     int check=scanf ("%lg, %lg, %lg", a, b, c);
+     int check = scanf ("%lg, %lg, %lg", a, b, c);
 
      while (check != 3)
          {
-         printf("# Sorry, try to input CORRECT information\n\n"
-                "# Enter your a, b, c: ");
+         printf ("# Sorry, try to input CORRECT information\n\n"
+                 "# Enter your a, b, c: ");
 
-         fflush(stdin);
+         fflush (stdin);
 
-         check=scanf ("%lg, %lg, %lg", a, b, c);
+         check = scanf ("%lg, %lg, %lg", a, b, c);
          }
      }
 
 
 //-----------------------------------------------------------------------------
 
+/*!
+
+     \param[in] a, b, c - коэффициенты квадратного уравнения.
+     \return 0 - уравнение не имеет корней, 1 - уравнение имеет один корень, 2 - уравнение имеет два корня.
+
+     Фунция, решающее квадратное уравнения вида a*x^2 + b*x + c = 0
+
+*/
 
  int Square(double a, double b, double c, double* root1, double* root2)
      {
      assert (root1 != NULL);
      assert (root2 != NULL);
 
-     double discr=b*b-4*a*c;
-     double zero=0;
+     double discr = b*b-4*a*c;
+     double  zero = 0;
 
      int res = comparer(discr, zero);
 
@@ -66,13 +88,13 @@ int comparer(double A, double B)
         return 0;
 
         case 0:
-        *root1=-b/2/a;
+        *root1 = -b/2/a;
 
         return 1;
 
         case 1:
-        *root1=(-b+sqrt(discr))/2/a;
-        *root2=(-b-sqrt(discr))/2/a;
+        *root1 = (-b+sqrt(discr))/2/a;
+        *root2 = (-b-sqrt(discr))/2/a;
 
         return 2;
         }
@@ -81,68 +103,76 @@ int comparer(double A, double B)
 
 //-----------------------------------------------------------------------------
 
+/*!
+
+     \param[in] b, c - коэффициенты линейного уравнения.
+     \return 0 - уравнение не имеет корней, 1 - уравнение имеет один корень, -1 - уравнение имеет бесконечное кол-во корней.
+
+     Фунция, решающее линейное уравнения вида b*x + c = 0
+
+*/
 
  int Linear(double b, double c, double* root1)
      {
      assert (root1 != NULL);
 
-     if (b==0)
-         {
-         return (c == 0)? infinity : 0;
-         }
-     else
-         {
-         *root1=-c/b;
+     if     (b == 0)
+     return (c == 0)? infinity : 0;
 
-         return 1;
-         }
+     *root1 = -c/b;
+
+     return 1;
      }
 
 
 //-----------------------------------------------------------------------------
 
+/*!
+
+     \brief Функция, рещающая уравнение.
+     \param[in] a, b, c - коэффициенты уравнения.
+     \return Значение вызванной функции Linear() - если решалось линейное уравнение, Square() - если квадратное.
+
+      Вызывает функцию Square() или Linear() в зависимости от того, какое уравнение задано (квадратное или линейное).
+*/
 
  int solver (double a, double b, double c, double* root1, double* root2)
      {
      assert (root1 != NULL);
      assert (root2 != NULL);
 
-     if (a!=0)
-         {
-         int square = Square (a, b, c, root1, root2);
+     if (a == 0)
+     return Linear (b, c, root1);
 
-         return square;
-         }
-
-     if (a==0)
-         {
-         int linear = Linear (b, c, root1);
-
-         return linear;
-         }
+     return Square (a, b, c, root1, root2);
      }
 
 
 //-----------------------------------------------------------------------------
 
+/*!
+
+     Главная функция, являющая собой тело программы.
+
+*/
 
  int main()
      {
-     printf ("# Equation solver (square version)\n"
+     printf ("# Equation solver (square (a*x^2 + b*x + c = 0) version)\n"
             "# (c) Ferrum, 2020\n\n");
 
      printf ("# Enter your a, b, c: ");
 
-     double a=0, b=0, c=0;
+     double a = 0, b = 0, c = 0;
 
      checker ( &a, &b, &c);
 
-     double x1=0, x2=0;
-     int n_of_roots=0;
+     double x1 = 0, x2 = 0;
+     int n_of_roots = 0;
 
      n_of_roots = solver(a, b, c, &x1, &x2);
 
-     printf("Answer: ");
+     printf ("Answer: ");
 
      switch (n_of_roots)
          {
