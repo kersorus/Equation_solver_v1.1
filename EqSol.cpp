@@ -20,7 +20,7 @@
 
  int comparer(double A, double B)
      {
-     if (fabs(A)-fabs(B) < infelicity)
+     if ( fabs ( A - B ) < infelicity)
      return 0;
 
      if              ( A < B )
